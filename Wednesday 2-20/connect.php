@@ -3,6 +3,7 @@ $servername = "localhost";
 $username = "root";
 $password = "";
 
+
 try {
     //Connect to server
     $pdo = new PDO("mysql:host=$servername",$username,$password);
