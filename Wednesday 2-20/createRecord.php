@@ -8,6 +8,7 @@ $dbname = "employees";
 try {
     $pdo = new PDO("mysql:host=$servername;dbname=$dbname",$username,$password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    //Create Record
     $sql = "INSERT INTO myEmployees (firstname, lastname, email)
     VALUES ('Adam', 'Park', 'adam@example.com')";
     $pdo->exec($sql);

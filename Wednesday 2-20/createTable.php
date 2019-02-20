@@ -8,6 +8,7 @@ $dbname = "employees";
 try {
     $pdo = new PDO("mysql:host=$servername;dbname=$dbname",$username,$password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    //Create Table
     $sql = "CREATE TABLE myEmployees (
         id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
         firstname VARCHAR(30) NOT NULL,

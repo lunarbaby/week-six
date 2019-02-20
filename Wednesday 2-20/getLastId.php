@@ -11,6 +11,7 @@ try {
     $sql = "INSERT INTO myEmployees (firstname, lastname, email)
     VALUES ('Jane', 'Doe', 'jan@example.com')";
     $pdo->exec($sql);
+    //Get the last Id or entry
     $last_id = $pdo->lastInsertId();
     echo "New record created successfully. Last inserted ID is: ".$last_id;
 } catch(PDOException $e){

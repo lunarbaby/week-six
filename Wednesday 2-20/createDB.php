@@ -7,6 +7,7 @@ $password = "";
 try {
     $pdo = new PDO("mysql:host=$servername",$username,$password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    //Create database
     $sql = "CREATE DATABASE myEmployees";
     $pdo->exec($sql);
     echo "Database created successfully";
