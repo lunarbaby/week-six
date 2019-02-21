@@ -13,7 +13,7 @@
 </html>
 <?php
 
-echo "<table style='border: solid 1px black;'>";
+echo "<table>";
 echo "<tr><th>Id</th><th>Task</th><th>Time entered</tr></tr>";
 
 class TableRows extends RecursiveIteratorIterator { 
@@ -29,12 +29,12 @@ class TableRows extends RecursiveIteratorIterator {
         echo "<tr>"; 
     } 
 
-    function endChildren() { 
+    function endChildren() {
         echo "</tr>" . "\n";
     } 
 } 
 
-//Connect to server
+
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -46,22 +46,22 @@ if(isset($_POST['submit'])){
     //Create Record
     $sql = "INSERT INTO todoapp (task) VALUES ('$task')";
     $pdo->exec($sql);
-    echo "New record created successfully";
+    $last_id = $pdo->lastInsertId();
+    echo "New record is created and the last inserted ID is: ".$last_id;
 
-    //Show records
+ 
 
     $stmt = $pdo->prepare("SELECT * FROM todoapp");
     $stmt->execute();
 
-    //set the resulting array to see data in database
+    
     $result= $stmt->setFetchMode(PDO::FETCH_ASSOC);
     foreach(new TableRows(new RecursiveArrayIterator($stmt->fetchAll())) as $k=>$v){
        echo $v;
-    }
-        
+        }
+    
+} 
 
-   
-}
 
 $pdo = null;
 ?>
