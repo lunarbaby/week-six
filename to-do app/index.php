@@ -12,6 +12,29 @@
 </body>
 </html>
 <?php
+
+echo "<table style='border: solid 1px black;'>";
+echo "<tr><th>Id</th><th>Task</th><th>Time entered</tr></tr>";
+
+class TableRows extends RecursiveIteratorIterator { 
+    function __construct($it) { 
+        parent::__construct($it, self::LEAVES_ONLY); 
+    }
+
+    function current() {
+        return "<td style='width:150px;border:1px solid black;'>" . parent::current(). "</td>";
+    }
+
+    function beginChildren() { 
+        echo "<tr>"; 
+    } 
+
+    function endChildren() { 
+        echo "</tr>" . "\n";
+    } 
+} 
+
+//Connect to server
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -25,19 +48,20 @@ if(isset($_POST['submit'])){
     $pdo->exec($sql);
     echo "New record created successfully";
 
-    // $stmt =$pdo->prepare("INSERT INTO todoapp(task) VALUES (:task)");
-    // $stmt->bindParam(':task', $task);
-    // $stmt = $pdo->prepare("SELECT * FROM todoapp");
-    // $stmt->execute();
-    // $stmt->setFetchMode(PDO::FETCH_ASSOC);
-    // $result = $stmt->fetchAll();
-    // foreach($stmt as $result){
-    //     echo "<pre>";
-    //     var_dump($result);
-    //     echo "</pre>";
-    // }
+    //Show records
+
+    $stmt = $pdo->prepare("SELECT * FROM todoapp");
+    $stmt->execute();
+
+    //set the resulting array to see data in database
+    $result= $stmt->setFetchMode(PDO::FETCH_ASSOC);
+    foreach(new TableRows(new RecursiveArrayIterator($stmt->fetchAll())) as $k=>$v){
+       echo $v;
+    }
+        
+
+   
 }
 
 $pdo = null;
 ?>
-
