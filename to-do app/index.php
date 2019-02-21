@@ -66,7 +66,7 @@ if(isset($_POST['submit'])){
     echo "</table>";
 
     if(isset($_POST['delete'])) {
-        $id = $_POST['delete'];
+        $id = $result['id'];
         $sql = "DELETE FROM todoapp WHERE id=$id";
         $pdo->exec($sql);
     }
