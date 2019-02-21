@@ -13,26 +13,26 @@
 </html>
 <?php
 
-echo "<table>";
-echo "<tr><th>Id</th><th>Task</th><th>Time entered</tr></tr>";
+// echo "<table>";
+// echo "<tr><th>Id</th><th>Task</th><th>Time entered</tr></tr>";
 
-class TableRows extends RecursiveIteratorIterator { 
-    function __construct($it) { 
-        parent::__construct($it, self::LEAVES_ONLY); 
-    }
+// class TableRows extends RecursiveIteratorIterator { 
+//     function __construct($it) { 
+//         parent::__construct($it, self::LEAVES_ONLY); 
+//     }
 
-    function current() {
-        return "<td style='width:150px;border:1px solid black;'>" . parent::current(). "</td>";
-    }
+//     function current() {
+//         return "<td style='width:150px;border:1px solid black;'>" . parent::current(). "</td>";
+//     }
 
-    function beginChildren() { 
-        echo "<tr>"; 
-    } 
+//     function beginChildren() { 
+//         echo "<tr>"; 
+//     } 
 
-    function endChildren() {
-        echo "</tr>" . "\n";
-    } 
-} 
+//     function endChildren() {
+//         echo "</tr>" . "\n";
+//     } 
+// } 
 
 
 $servername = "localhost";
@@ -48,20 +48,23 @@ if(isset($_POST['submit'])){
     $pdo->exec($sql);
     $last_id = $pdo->lastInsertId();
     echo "New record is created and the last inserted ID is: ".$last_id;
-
- 
-
+    
+    
     $stmt = $pdo->prepare("SELECT * FROM todoapp");
     $stmt->execute();
-
-    
-    $result= $stmt->setFetchMode(PDO::FETCH_ASSOC);
-    foreach(new TableRows(new RecursiveArrayIterator($stmt->fetchAll())) as $k=>$v){
-       echo $v;
-        }
+    $stmt->setFetchMode(PDO::FETCH_ASSOC);
+    $result = $stmt->fetchAll();
+    // foreach(new TableRows(new RecursiveArrayIterator($stmt->fetchAll())) as $k=>$v){
+    //    echo $v;
+    //     }
+    foreach($result as $row){
+        echo "<li>".$row['task']."<form><input type='submit' value='delete' name='delete'></form></li><br>";
+    }
+   
     
 } 
 
 
 $pdo = null;
 ?>
+
