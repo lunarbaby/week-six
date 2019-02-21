@@ -47,7 +47,7 @@ if(isset($_POST['submit'])){
     $sql = "INSERT INTO todoapp (task) VALUES ('$task')";
     $pdo->exec($sql);
     $last_id = $pdo->lastInsertId();
-    echo "New record is created and the last inserted ID is: ".$last_id;
+    echo "New record is created and the last inserted ID is: ".$last_id."<br>";
     
     
     $stmt = $pdo->prepare("SELECT * FROM todoapp");
@@ -57,14 +57,24 @@ if(isset($_POST['submit'])){
     // foreach(new TableRows(new RecursiveArrayIterator($stmt->fetchAll())) as $k=>$v){
     //    echo $v;
     //     }
-    foreach($result as $row){
-        echo "<li>".$row['task']."<form><input type='submit' value='delete' name='delete'></form></li><br>";
+    echo "<table>";
+       foreach($result as $row){
+        global $idbutton;
+        $idbutton = $row['id'];
+        echo "<tr>".$row['task']. "<form action='index.php' method='post'><input type='submit' value='delete' name='delete' id='$idbutton'></form></tr><br>";
     }
-   
+    echo "</table>";
+
+    if(isset($_POST['delete'])) {
+        $id = $_POST['delete'];
+        $sql = "DELETE FROM todoapp WHERE id=$id";
+        $pdo->exec($sql);
+    }
     
+   
 } 
-
-
 $pdo = null;
 ?>
+
+
 
