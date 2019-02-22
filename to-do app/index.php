@@ -13,28 +13,6 @@
 </html>
 <?php
 
-// echo "<table>";
-// echo "<tr><th>Id</th><th>Task</th><th>Time entered</tr></tr>";
-
-// class TableRows extends RecursiveIteratorIterator { 
-//     function __construct($it) { 
-//         parent::__construct($it, self::LEAVES_ONLY); 
-//     }
-
-//     function current() {
-//         return "<td style='width:150px;border:1px solid black;'>" . parent::current(). "</td>";
-//     }
-
-//     function beginChildren() { 
-//         echo "<tr>"; 
-//     } 
-
-//     function endChildren() {
-//         echo "</tr>" . "\n";
-//     } 
-// } 
-
-
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -47,6 +25,7 @@ if(isset($_POST['submit'])){
     $sql = "INSERT INTO todoapp (task) VALUES ('$task')";
     $pdo->exec($sql);
     $last_id = $pdo->lastInsertId();
+    var_dump($_POST);
     echo "New record is created and the last inserted ID is: ".$last_id."<br>";
     
     
@@ -54,26 +33,27 @@ if(isset($_POST['submit'])){
     $stmt->execute();
     $stmt->setFetchMode(PDO::FETCH_ASSOC);
     $result = $stmt->fetchAll();
-    // foreach(new TableRows(new RecursiveArrayIterator($stmt->fetchAll())) as $k=>$v){
-    //    echo $v;
-    //     }
-    echo "<table>";
-       foreach($result as $row){
-        global $idbutton;
-        $idbutton = $row['id'];
-        echo "<tr>".$row['task']. "<form action='index.php' method='post'><input type='submit' value='delete' name='delete' id='$idbutton'></form></tr><br>";
-    }
-    echo "</table>";
-
-    if(isset($_POST['delete'])) {
-        $id = $result['id'];
-        $sql = "DELETE FROM todoapp WHERE id=$id";
-        $pdo->exec($sql);
-    }
     
-   
 } 
-$pdo = null;
+
+echo "<table>";
+$stmt = $pdo->prepare("SELECT * FROM todoapp");
+$stmt->execute();
+$stmt->setFetchMode(PDO::FETCH_ASSOC);
+$result = $stmt->fetchAll();
+foreach($result as $row){
+ global $idbutton;
+ $idbutton = $row['id'];
+ echo "<tr><td>".$row['task']. "<form action='index.php' method='post'><input name='delete' value=$idbutton hidden ><input type='submit' value='delete'></input></form></td></tr>";
+}
+echo "</table>";
+
+if(isset($_POST['delete'])) {
+    $delete = $_POST['delete'];
+ $sql = "DELETE FROM todoapp WHERE id=$delete";
+ $pdo->exec($sql);
+ }
+
 ?>
 
 
